@@ -11,10 +11,7 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'message',
-    loadChildren: () => import('./message/message.module').then( m => m.MessagePageModule)
-  },
+
   {
     path: 'map',
     loadChildren: () => import('./map/map.module').then( m => m.MapPageModule)

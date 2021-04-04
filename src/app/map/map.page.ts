@@ -48,6 +48,10 @@ export class MapPage implements OnInit, AfterContentInit {
   }
 
   loadMap() {
+    // tslint:disable-next-line: new-parens
+    const directionsService = new google.maps.DirectionsService(); // ประกาศตัวแปรหาเส้นทาง
+    // tslint:disable-next-line: new-parens
+    const directionsDisplay = new google.maps.DirectionsRenderer(); // ประกาศตัวแปรแสดงเส้นทาง
     this.geolocation
       .getCurrentPosition()
       .then((resp) => {
@@ -74,6 +78,35 @@ export class MapPage implements OnInit, AfterContentInit {
           map: this.map,
           title: 'nat',
         });
+
+        directionsDisplay.setMap(this.map); // ให้ตัวแปรหาเส้นทางใช้กับ this.map
+        directionsService.route(
+          {
+            origin: latLng, // ตำแหน่งต้นทาง ตอนนี้ใช้ตำแหน่งของเรา
+            destination: { lat: 13.7898401, lng: 100.5730751 }, // ตำแหน่งปลายทาง อันนี้จ๊อบเขียนละติจูด ลองจิจูตขึ้นมาเอง
+            travelMode: 'DRIVING', // เส้นทางแบบรถยนต์ มีหลายโหมดลองไปดูเอา แต่ไทยไม่มีแบบจักรยาน
+            // tslint:disable-next-line: only-arrow-functions
+          },
+          function (response: any, status: string) {
+            // ฟังก์ชันที่ทำหลังจากที่ตรวจเส้นทางเสร็จว่าเส้นทางจากตำแหน่งต้นไปตำแหน่งปลายมีเส้นทางไหมในโหมดรถยนต์
+            if (status === 'OK') {
+              directionsDisplay.setDirections(response);
+
+              const route = response.routes[0];
+              // const summaryPanel = document.getElementById('directions-panel1');
+              // summaryPanel.innerHTML = '';
+              // // For each route, display summary information.
+              // for (let i = 0; i < route.legs.length; i++) {
+              //   const routeSegment = i + 1;
+              //   summaryPanel.innerHTML +=
+              //     summaryPanel.innerHTML += '<b>จุดเกิดเหตุ:    </b>' + route.legs[i].start_address + '<br>';
+              //   summaryPanel.innerHTML += '<b>ระยะทาง:    </b>' + route.legs[i].distance.text + ' ถึงในอีก ' + route.legs[i].duration.text;
+              // }
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          }
+        );
 
         this.map.addListener('click', (mapsMouseEvent) => {
           let lat_click = mapsMouseEvent.latLng.toJSON().lat;
