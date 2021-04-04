@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title> Google Maps </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-toolbar color="warning">
+  <ion-button (click)="loadMap()" shape="round" color="dark">
+    <ion-icon slot="start" name="locate"></ion-icon>
+    ตำแหน่งของฉัน
+  </ion-button>
+  <ion-title slot="end"> ร้านอาหารใกล้ฉัน</ion-title>
+</ion-toolbar>
+
+<ion-content [fullscreen]="true">
+  <div class="map-wrapper">
+    <div #map id="map" [hidden]=""></div>
+  </div>
+</ion-content>

@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+  My app
+  </ion-title>
+</ion-toolbar>
+
+<ion-toolbar>
+  <ion-searchbar id='searchtext' (ionChange)="search()"></ion-searchbar>
+</ion-toolbar>
+
+
+  <ion-title>
+  <ion-row>
+    <ion-col>
+    <ion-slides pager="true"
+    [options]="{effect:'flip',autoplay:true}">
+    <ion-slide>
+    <ion-img src="https://img.wongnai.com/p/1920x0/2020/01/07/e625724e6c604fc9984bfc4f42fca43e.jpg"></ion-img>
+    </ion-slide>
+    <ion-slide>
+    <ion-img class="js-img"
+   src="https://www.ryoiireview.com/upload/article/202006/1592816345_6a7036340a6eb29ef2eaea0f08e7cc1d.jpg"></ion-img>
+    </ion-slide>
+    <ion-slide>
+    <ion-img class="js-img"
+   src="https://img.wongnai.com/p/1920x0/2018/08/28/686d6a012b2241228f86fde615543bbb.jpg"></ion-img>
+    </ion-slide>
+    </ion-slides>
+    </ion-col>
+    </ion-row>
+  </ion-title>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="ion-padding">
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>ร้านสีไพลิน รังสิต คลองสาม</ion-card-title>
+      </ion-card-header>
+      <ion-img src="https://www.ryoiireview.com/upload/article/201907/1563352819_72a75cc4cb486238c7e9552c4c5980de.jpg"></ion-img>
+      <ion-card-content>
+        ร้านสีไพลิน รังสิต คลองสาม ตั้งอยู่แถวถนนรังสิต นครนายก จะอยู่ช่วงคลองสามฝั่งธัญบุรี บรรยากาศร้านดูกว้างขวางสบายตามาพร้อมกับราคาอาหารที่เป็นมิตร โดยราคาอาหารจานเดียว เริ่มต้นที่ 85 บาท ส่วนเป็นกับข้าวก็เริ่มต้นที่ 150 บาท ใครเป็นสายซีฟู้ดเตรียมฟินกับความขาวอวบ เต่งตึง เด้งดึ๋งในปากกับกุ้งยักษ์เผา กุ้งไซส์ยักษ์สดๆ มันทะลักกันดีกว่าค่ะ ทานพร้อมน้ำจิ้มรสเด็ดด้วยล่ะก็อร่อยจนหยุดไม่อยู่ หรือจะสั่งเป็นผัดไทยกุ้งแม่น้ำ (350 บาท) รับรองติดใจผัดไทยกุ้งไซส์อยากสูตรของร้านนี้แน่นอนค่ะ สำหรับลูกค้าที่มาเป็นครอบครัวสามารถนั่งโต๊ะเดียวกันได้ค่ะ ที่ร้านเว้นระยะห่างโต๊ะละ 1 เมตร.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>ร้านอาหารเกาหลี มันเซโคเรีย</ion-card-title>
+      </ion-card-header>
+      <ion-img src="https://www.ryoiireview.com/upload/article/201801/1515405319_45f7a513a3b146ceb01a254d5092f42f.jpg"></ion-img>
+      <ion-card-content>
+        ร้านอาหารเกาหลีร้านนี้ชื่อว่า มันเซโคเรีย อยู่ที่ชั้น 2 ศูนย์การค้าเพียวเพลส คลอง 2 ค่ะ เป็นร้านอาหารเกาหลีบุฟเฟ่ต์ ราคา 399 บาท/คน เป็นแบบชุดรวมที่สามารถทานได้ทั้งหมู ไก่ เนื้อ ซีฟู้ด และเมนูอื่นๆ พร้อมเสิร์ฟแบบไม่อั้น และราคา 299 บาท/คน สามารถทานได้ทั้งหมู และไก่ ทั้งสองราคาจำกัดเวลาอยู่ที่ 1:30 ชม. ราคาทั้งหมดนี่รวมเครื่องดื่มด้วยนะคะ สายบุฟเฟ่ต์ที่อยากมาทานที่ร้านรบกวนจองล่วงหน้านะคะจะได้ไม่พลาดความอร่อยในเวลาที่ต้องการ.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+       <ion-card-title>ร้านแหนมเนืองครัวคุณไก่</ion-card-title>
+      </ion-card-header>
+      <ion-img src="https://www.ryoiireview.com/upload/article/202006/1592804348_b5359914cdeb3de7bd4b9d467e8ba29e.jpg"></ion-img>
+      <ion-card-content>
+        อาหารเวียดนามในย่านนี้ต้องร้าน แหนมเนืองครัวคุณไก่ ร้านอาหารเวียดนามที่มีเมนูเวียดนามให้เลือกมากมาย ไม่ว่าจะเป็นแหนมเนืองที่ทางร้านมีแหนมเป็นรสชาติเป็นเอกลักษณ์ และในส่วนเมนูอื่นๆ ก็น่าสนใจไม่แพ้กัน อย่างปอเปี๊ยะทอด หมูห่อใบชะพลู กุ้งพันอ้อย ขนมเบื้อง ส้มตำทอด และตำคอหมูย่าง ราคาเริ่มต้นที่ประมาณ 100 บาท.
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="loadMoreItems($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      I<ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button (click)="goTohome()">
+            <ion-icon name="home-outline"expand="full" shape="round" ></ion-icon>
+            <ion-label (click)="goTohome()">Home</ion-label>
+            <ion-icon slot="start" name="star"></ion-icon>
+          </ion-tab-button>
+
+
+          <ion-tab-button  (click)="goToMessang()">
+            <ion-icon name="chatbubble-ellipses-outline"expand="full" shape="round" ></ion-icon>
+            <ion-label (click)="goToMessang()">Message</ion-label>
+          </ion-tab-button>
+
+          <ion-tab-button tab="map">
+            <ion-icon name="map"></ion-icon>
+            <ion-label>Map</ion-label>
+          </ion-tab-button>
+
+          <ion-tab-button tab="Profile">
+            <ion-icon name="person-circle"expand="full" shape="round" (click)="goToprofile()"></ion-icon>
+            <ion-label>Profile</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

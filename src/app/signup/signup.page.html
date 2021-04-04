@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>signup</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form novalidate #myForm="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">ชื่อ-นามสกุล</ion-label>
+        <ion-input
+          ngModel
+          type="text"
+          name="fullname"
+          #fullname="ngModel"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-text
+        class="ion-padding"
+        color="danger"
+        *ngIf="fullname.invalid && (fullname.dirty || fullname.touched)"
+      >
+        กรุณาป้อนชื่อ-นามสกุล
+      </ion-text>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input
+          ngModel
+          type="email"
+          name="email"
+          #email="ngModel"
+          required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-text
+        class="ion-padding"
+        color="danger"
+        *ngIf="email.invalid
+&& (email.dirty || email.touched)"
+      >
+        กรุณาป้อนอีเมล์ และระบุรูปแบบอีเมล์ให้ถูกต้อง
+      </ion-text>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input
+          ngModel
+          type="password"
+          name="password"
+          #password="ngModel"
+          required
+          minlength="3"
+        ></ion-input>
+      </ion-item>
+      <ion-text
+        class="ion-padding"
+        color="danger"
+        *ngIf="password.invalid && (password.dirty || password.touched)"
+      >
+        กรุณาป้อนรหัสผ่าน และรหัสผานต้องป้อนอย่างน้อย ่ 3 ตัวอักษร
+      </ion-text>
+      <ion-button
+        class="ion-margin-top"
+        [disabled]="myForm.invalid"
+        size="large"
+        expand="full"
+        (click)="signup(myForm.value)"
+      >
+        สร้างบัญชี
+      </ion-button>
+    </ion-list>
+  </form>
+</ion-content>

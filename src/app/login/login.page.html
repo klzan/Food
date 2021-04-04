@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="center">
+    <div heading-colum-lr></div>
+
+    <form novalidate #myForm="ngForm">
+      <ion-item transparent>
+        <ion-input
+          ngModel
+          type="text"
+          name="email"
+          placeholder="อีเมล"
+          type="text"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item transparent>
+        <ion-input
+          ngModel
+          type="password"
+          name="password"
+          #email="ngModel"
+          placeholder="รหัสผ่าน"
+          required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
+        >
+        </ion-input>
+      </ion-item>
+    </form>
+    <div linespace></div>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          type="submit"
+          color="danger"
+          expand="block"
+          (click)="login(myForm.value)"
+          >Sign In</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-label class="ion-text-center">
+      ไม่มีบัญชีผู้
+      <span class="link-button" (click)="signup()"><b> สมัครสมาชิก</b></span>
+    </ion-label>
+  </div>
+</ion-content>
