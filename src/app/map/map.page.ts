@@ -1,25 +1,11 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {AfterContentInit,Component,ElementRef,OnInit,ViewChild,} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 declare var google;
-import {
-  NativeGeocoder,
-  NativeGeocoderResult,
-  NativeGeocoderOptions,
-} from '@ionic-native/native-geocoder/ngx';
-import {
-  LoadingController,
-  AlertController,
-  NavController,
-} from '@ionic/angular';
-
+import {NativeGeocoder,NativeGeocoderResult,NativeGeocoderOptions,} from '@ionic-native/native-geocoder/ngx';
+import {LoadingController,AlertController,NavController,} from '@ionic/angular';
 import { FeedBack } from '../models/feedback';
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
