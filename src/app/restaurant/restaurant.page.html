@@ -7,6 +7,13 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+<ion-list>
+  <ion-item *ngFor="let item of items">
+    {{ item }}
+  </ion-item>
+</ion-list>
+
 <ion-content>
   <ion-item detail *ngFor="let c of restaurants" (click)="itemSelected(c)">
     <ion-label>
