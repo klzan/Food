@@ -15,12 +15,17 @@ export class AppComponent {
     {
       title: 'แผนที่',
       url: '/map',
-      icon: 'map',
+      icon: 'compass',
     },
     {
       title: 'ร้านอาหาร',
       url: '/restaurant',
       icon: 'restaurant',
+    },
+    {
+      title: 'รีวิวร้านอาหาร',
+      url: '/review',
+      icon: 'book',
     },
     {
       title: 'โปรไฟล์',

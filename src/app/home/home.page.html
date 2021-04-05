@@ -4,11 +4,14 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title> My app </ion-title>
+
   </ion-toolbar>
 
   <ion-toolbar>
     <ion-searchbar id="searchtext" (ionChange)="search()"></ion-searchbar>
   </ion-toolbar>
+
+
 
   <ion-title>
     <ion-row>
@@ -108,7 +111,7 @@
       <ion-tab-bar slot="bottom">
         <ion-tab-button (click)="goTohome()">
           <ion-icon name="home-outline" expand="full" shape="round"></ion-icon>
-          <ion-label (click)="goTohome()">Home</ion-label>
+          <ion-label>Home</ion-label>
           <ion-icon slot="start" name="star"></ion-icon>
         </ion-tab-button>
 
@@ -126,7 +129,13 @@
           ></ion-icon>
           <ion-label>Profile</ion-label>
         </ion-tab-button>
+
+        <ion-tab-button (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <ion-label>Logout</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
+
     </ion-tabs>
   </ion-toolbar>
 </ion-footer>

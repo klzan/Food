@@ -28,9 +28,7 @@ export class HomePage {
   goTomap() {
     this.navCtrl.navigateForward('/map');
   }
-  goToMessang() {
-    this.navCtrl.navigateForward('/message');
-  }
+
 
   goToonclick() {
     this.navCtrl.navigateForward('/onclick');
@@ -41,7 +39,11 @@ export class HomePage {
   }
 
 
-
+  logout() {
+    localStorage.setItem("login", "0");
+    localStorage.removeItem("name");
+    this.navCtrl.navigateRoot("/login");
+  }
 
 
 }
