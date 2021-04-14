@@ -2,11 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RestaurantService } from '../Restaurant.Service';
 import { restaurant } from '../models/restaurant';
 import { Subscription } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { NavController,NavParams } from '@ionic/angular';
+
+
 @Component({
   selector: 'app-restaurant',
   templateUrl: './restaurant.page.html',
   styleUrls: ['./restaurant.page.scss'],
+
 })
 export class RestaurantPage implements OnInit, OnDestroy {
   restaurants: restaurant[];
@@ -14,14 +17,17 @@ export class RestaurantPage implements OnInit, OnDestroy {
   NavCtrl: any;
   searchQuery: string = '';
   items: string[];
+  baseURI: string;
+  http: any;
+
 
   constructor(
     private navCtrl: NavController,
     private RestaurantService: RestaurantService
 
-  ) { this.initializeItems(RestaurantService);}
-
-
+  ) { this.initializeItems;
+      // this.items = NavParams.RestaurantService.item;
+  }
 
   ngOnInit() {
     this.sub = this.RestaurantService.getrestaurant().subscribe(
@@ -36,37 +42,49 @@ export class RestaurantPage implements OnInit, OnDestroy {
   }
 
   itemSelected(c: restaurant) {
-    this.navCtrl.navigateForward([
-      '/detail2',
-      {
+    this.navCtrl.navigateForward(['/detail2',{
         id: c.name,
         title: c.name,
+        // open : c.open,
+        // address: c.address,
+        // number: c.number,
+        // map: c.map,
+        // location: c.location,
       },
     ]);
   }
 //ค้นหาร้านอาหาร
-  initializeItems(RestaurantService) {
-    this.items = [
-      'klong1',
-      'klong2',
+loadData()
+{
+    var link = this.baseURI + "http://localhost/res/res.php";
 
-    ];
-  }
+    this.http.get(link)
+    .map(res => res.json())
+    .subscribe(data =>
+    {
+        console.log("restaurants: ", data);
+        this.restaurants = data;
+    });
+}
 
-  getItems(ev: any) {
+initializeItems(){
+    this.restaurants = this.restaurants;
+}
+
+getItem(ev: any){
     // Reset items back to all of the items
-    this.initializeItems(RestaurantService);
+    this.initializeItems();
 
     // set val to the value of the searchbar
-    const val = ev.target.value;
+    let val = ev.target.value;
 
     // if the value is an empty string don't filter the items
     if (val && val.trim() != '') {
-      this.items = this.items.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      this.restaurants = this.restaurants.filter((item) => {
+        return (item.name.toLowerCase().indexOf(val.toLowerCase())>-1);
       })
     }
-  }
+}
 }
 
 
