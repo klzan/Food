@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RestaurantService } from '../Restaurant.Service';
 import { restaurant } from '../models/restaurant';
 import { Subscription } from 'rxjs';
-import { NavController,NavParams } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 
 
 @Component({
@@ -45,11 +45,6 @@ export class RestaurantPage implements OnInit, OnDestroy {
     this.navCtrl.navigateForward(['/detail2',{
         id: c.name,
         title: c.name,
-        // open : c.open,
-        // address: c.address,
-        // number: c.number,
-        // map: c.map,
-        // location: c.location,
       },
     ]);
   }

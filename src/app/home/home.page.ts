@@ -42,6 +42,7 @@ export class HomePage {
   logout() {
     localStorage.setItem("login", "0");
     localStorage.removeItem("name");
+    localStorage.removeItem("review");
     this.navCtrl.navigateRoot("/login");
   }
 

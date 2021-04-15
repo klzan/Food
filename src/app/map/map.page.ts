@@ -141,4 +141,8 @@ export class MapPage implements OnInit, AfterContentInit {
         this.address = 'Address Not Available!';
       });
   }
+
+   
+
+
 }
