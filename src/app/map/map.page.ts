@@ -1,148 +1,159 @@
-import {AfterContentInit,Component,ElementRef,OnInit,ViewChild,} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+
 declare var google;
-import {NativeGeocoder,NativeGeocoderResult,NativeGeocoderOptions,} from '@ionic-native/native-geocoder/ngx';
-import {LoadingController,AlertController,NavController,} from '@ionic/angular';
-import { FeedBack } from '../models/feedback';
 
 @Component({
   selector: 'app-map',
-  templateUrl: './map.page.html',
-  styleUrls: ['./map.page.scss'],
+  templateUrl: 'map.page.html',
+  styleUrls: ['map.page.scss'],
 })
-export class MapPage implements OnInit, AfterContentInit {
-  map;
+export class MapPage implements OnInit {
 
-  @ViewChild('map', { static: false }) mapElement: ElementRef;
-  Map: any;
-  address: string;
+  @ViewChild('map',  {static: false}) mapElement: ElementRef;
+  map: any;
+  address:string;
+  lat: string;
+  long: string;
+  autocomplete: { input: string; };
+  autocompleteItems: any[];
+  location: any;
+  placeid: any;
+  GoogleAutocomplete: any;
+  geocoder: any;
+  markers: any[];
 
-  lat: number;
-  lng: number;
 
   constructor(
     private geolocation: Geolocation,
-    private nativeGeocoder: NativeGeocoder
-  ) {}
-  ngAfterContentInit(): void {
-    throw new Error('Method not implemented.');
+    private nativeGeocoder: NativeGeocoder,
+    public zone: NgZone,
+  ) {
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocomplete = { input: '' };
+    this.autocompleteItems = [];
+    this.geocoder = new google.maps.Geocoder;
+    this.markers = [];
   }
 
+  //LOAD THE MAP ONINIT.
   ngOnInit() {
     this.loadMap();
   }
 
+  //LOADING THE MAP HAS 2 PARTS.
   loadMap() {
-    // tslint:disable-next-line: new-parens
-    const directionsService = new google.maps.DirectionsService(); // ประกาศตัวแปรหาเส้นทาง
-    // tslint:disable-next-line: new-parens
-    const directionsDisplay = new google.maps.DirectionsRenderer(); // ประกาศตัวแปรแสดงเส้นทาง
-    this.geolocation
-      .getCurrentPosition()
-      .then((resp) => {
-        this.lat = resp.coords.latitude;
-        this.lng = resp.coords.longitude;
 
-        let latLng = new google.maps.LatLng(
-          resp.coords.latitude,
-          resp.coords.longitude
-        );
-        let mapOptions = {
-          center: latLng,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-        };
+    //FIRST GET THE LOCATION FROM THE DEVICE.
+    this.geolocation.getCurrentPosition().then((resp) => {
+      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      let mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
 
-        this.map = new google.maps.Map(
-          this.mapElement.nativeElement,
-          mapOptions
-        );
-        new google.maps.Marker({
-          position: latLng,
-          // position: {lat: 13.8187081, lng: 100.5775842},
-          map: this.map,
-          title: 'nat',
-        });
-
-        directionsDisplay.setMap(this.map); // ให้ตัวแปรหาเส้นทางใช้กับ this.map
-        directionsService.route(
-          {
-            origin: latLng, // ตำแหน่งต้นทาง ตอนนี้ใช้ตำแหน่งของเรา
-            destination: { lat: 13.7898401, lng: 100.5730751 }, // ตำแหน่งปลายทาง อันนี้จ๊อบเขียนละติจูด ลองจิจูตขึ้นมาเอง
-            travelMode: 'DRIVING', // เส้นทางแบบรถยนต์ มีหลายโหมดลองไปดูเอา แต่ไทยไม่มีแบบจักรยาน
-            // tslint:disable-next-line: only-arrow-functions
-          },
-          function (response: any, status: string) {
-            // ฟังก์ชันที่ทำหลังจากที่ตรวจเส้นทางเสร็จว่าเส้นทางจากตำแหน่งต้นไปตำแหน่งปลายมีเส้นทางไหมในโหมดรถยนต์
-            if (status === 'OK') {
-              directionsDisplay.setDirections(response);
-
-              const route = response.routes[0];
-              // const summaryPanel = document.getElementById('directions-panel1');
-              // summaryPanel.innerHTML = '';
-              // // For each route, display summary information.
-              // for (let i = 0; i < route.legs.length; i++) {
-              //   const routeSegment = i + 1;
-              //   summaryPanel.innerHTML +=
-              //     summaryPanel.innerHTML += '<b>จุดเกิดเหตุ:    </b>' + route.legs[i].start_address + '<br>';
-              //   summaryPanel.innerHTML += '<b>ระยะทาง:    </b>' + route.legs[i].distance.text + ' ถึงในอีก ' + route.legs[i].duration.text;
-              // }
-            } else {
-              window.alert('Directions request failed due to ' + status);
-            }
-          }
-        );
-
-        this.map.addListener('click', (mapsMouseEvent) => {
-          let lat_click = mapsMouseEvent.latLng.toJSON().lat;
-          let lng_click = mapsMouseEvent.latLng.toJSON().lng;
-          this.addMarker(mapsMouseEvent.latLng, lat_click, lng_click);
-          console.log('lat', mapsMouseEvent.latLng.lat());
-          console.log('lng', mapsMouseEvent.latLng.lng());
-          // this.savelatlng(mapsMouseEvent);
-          // this.savelatlng();
-        });
-      })
-      .catch((error) => {
-        console.log('Error getting location', error);
+      //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
+      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude);
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      this.map.addListener('tilesloaded', () => {
+        console.log('accuracy',this.map, this.map.center.lat());
+        this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+        this.lat = this.map.center.lat()
+        this.long = this.map.center.lng()
       });
-  }
-
-  addMarker(location, lat, lng) {
-    const marker = new google.maps.Marker({
-      position: location,
-      map: this.map,
+    }).catch((error) => {
+      console.log('Error getting location', error);
     });
   }
+  //ค้นหาอันใหม่
+ionViewDidEnter(){
+	//Set latitude and longitude of some place
+	this.map = new google.maps.Map(document.getElementById('map'), {
+		center: { lat: -34.9011, lng: -56.1645 },
+		zoom: 15
+	});
+}
+updateSearchResults(){
+  if (this.autocomplete.input == '') {
+    this.autocompleteItems = [];
+    return;
+  }
+  this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
+	(predictions, status) => {
+    this.autocompleteItems = [];
+    this.zone.run(() => {
+      predictions.forEach((prediction) => {
+        this.autocompleteItems.push(prediction);
+      });
+    });
+  });
+}
+//จบ
 
   getAddressFromCoords(lattitude, longitude) {
-    console.log('getAddressFromCoords ' + lattitude + ' ' + longitude);
+    console.log("getAddressFromCoords "+lattitude+" "+longitude);
     let options: NativeGeocoderOptions = {
       useLocale: true,
-      maxResults: 5,
+      maxResults: 5
     };
-
-    this.nativeGeocoder
-      .reverseGeocode(lattitude, longitude, options)
+    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
       .then((result: NativeGeocoderResult[]) => {
-        this.address = '';
+        this.address = "";
         let responseAddress = [];
         for (let [key, value] of Object.entries(result[0])) {
-          if (value.length > 0) responseAddress.push(value);
+          if(value.length>0)
+          responseAddress.push(value);
         }
         responseAddress.reverse();
         for (let value of responseAddress) {
-          this.address += value + ', ';
+          this.address += value+", ";
         }
         this.address = this.address.slice(0, -2);
       })
-      .catch((error: any) => {
-        this.address = 'Address Not Available!';
+      .catch((error: any) =>{
+        this.address = "Address Not Available!";
       });
   }
 
-   
+  //FUNCTION SHOWING THE COORDINATES OF THE POINT AT THE CENTER OF THE MAP
+  ShowCords(){
+    alert('lat' +this.lat+', long'+this.long )
+  }
+
+  //ส่งค่าสิ่งที่ค้นหา
+  selectSearchResult(item){
+
+    this.autocompleteItems = [];
+
+    this.geocoder.geocode({'placeId': item.place_id}, (results, status) => {
+      if(status === 'OK' && results[0]){
+        let position = {
+            lat: results[0].geometry.location.lat,
+            lng: results[0].geometry.location.lng
+        };
+        let marker = new google.maps.Marker({
+          position: results[0].geometry.location,
+          map: this.map,
+        });
+        this.markers.push(marker);
+        this.map.setCenter(results[0].geometry.location);
+
+
+      }
+    })
+  }
+  //lET'S BE CLEAN! THIS WILL JUST CLEAN THE LIST WHEN WE CLOSE THE SEARCH BAR.
+  ClearAutocomplete(){
+    this.autocompleteItems = []
+    this.autocomplete.input = ''
+  }
+
+  //sIMPLE EXAMPLE TO OPEN AN URL WITH THE PLACEID AS PARAMETER.
+  GoTo(){
+    return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
+  }
 
 
 }

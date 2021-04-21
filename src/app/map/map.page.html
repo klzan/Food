@@ -1,20 +1,34 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar color="primary">
-    <ion-title> Google Maps </ion-title>
+    <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
   </ion-toolbar>
-  
+  <ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+  <ion-row>
+    <ion-col size="6">
+      <ion-text>Google & Ionic Map</ion-text>
+    </ion-col>
+    <ion-col  size="6">
+      <ion-button (click)="loadMap()" shape="round" fill="outline">
+        <ion-icon slot="start" name="locate"></ion-icon>
+          Where I Am
+        </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-header>
-
-<ion-toolbar color="primary">
-  <ion-button (click)="loadMap()" shape="round" color="dark">
-    <ion-icon slot="start" name="locate"></ion-icon>
-    ตำแหน่งของฉัน
-  </ion-button>
-  <ion-title slot="end"> ร้านอาหารใกล้ฉัน</ion-title>
-</ion-toolbar>
-
-<ion-content [fullscreen]="true">
-  <div class="map-wrapper">
-    <div #map id="map" [hidden]=""></div>
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="ShowCords()" ion-fab color="tertiary">
+      <ion-icon name="information-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <div class="map-wrapper" style="height: 100%;">
+    <div id="map_center">
+      <ion-icon name="pin" size="large" color="danger"></ion-icon>
+    </div>
+    <div #map id="map"  style="height: 100%;"></div>
   </div>
 </ion-content>
