@@ -5,25 +5,32 @@ import {LoadingController,AlertController,NavController,} from '@ionic/angular';
 declare var google;
 
 @Component({
-  selector: 'app-map',
-  templateUrl: 'map.page.html',
-  styleUrls: ['map.page.scss'],
+  selector: 'app-location',
+  templateUrl: 'location.page.html',
+  styleUrls: ['location.page.scss'],
 })
-export class MapPage implements OnInit {
+export class LocationPage implements OnInit {
 
   @ViewChild('map',  {static: false}) mapElement: ElementRef;
   map: any;
   address:string;
   lat: number;
   long: number;
-  autocomplete: { input: string; };
-  autocompleteItems: any[];
+  // autocomplete: { input: string; };
+  // autocompleteItems: any[];
   location: any;
   placeid: any;
-  GoogleAutocomplete: any;
-  geocoder: any;
+  // GoogleAutocomplete: any;
+  // geocoder: any;
   markers: any[];
-
+  // GooglePlaces: any;
+  autocomplete: any;
+  GoogleAutocomplete: any;
+  GooglePlaces: any;
+  geocoder: any
+  autocompleteItems: any;
+  nearbyItems: any = new Array<any>();
+  loading: any;
 
 
   constructor(
@@ -31,12 +38,14 @@ export class MapPage implements OnInit {
     private nativeGeocoder: NativeGeocoder,
     public zone: NgZone,
     private navCtrl: NavController,
+    public loadingCtrl: LoadingController
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
     this.geocoder = new google.maps.Geocoder;
     this.markers = [];
+    
   }
 
   //LOAD THE MAP ONINIT.
@@ -87,31 +96,6 @@ export class MapPage implements OnInit {
       console.log('Error getting location', error);
     });
   }
-  //ค้นหาอันใหม่
-ionViewDidEnter(){
-	//Set latitude and longitude of some place
-	this.map = new google.maps.Map(document.getElementById('map'), {
-		center: { lat: -34.9011, lng: -56.1645 },
-		zoom: 15
-	});
-}
-
-updateSearchResults(){
-  if (this.autocomplete.input == '') {
-    this.autocompleteItems = [];
-    return;
-  }
-  this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-	(predictions, status) => {
-    this.autocompleteItems = [];
-    this.zone.run(() => {
-      predictions.forEach((prediction) => {
-        this.autocompleteItems.push(prediction);
-      });
-    });
-  });
-}
-//จบ
 
   getAddressFromCoords(lattitude, longitude) {
     console.log("getAddressFromCoords "+lattitude+" "+longitude);
@@ -140,31 +124,49 @@ updateSearchResults(){
 
 
 
+  updateSearchResults(){
+    if (this.autocomplete.input == '') {
+      this.autocompleteItems = [];
+      return;
+    }
+    this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
+      (predictions, status) => {
+        this.autocompleteItems = [];
+        if(predictions){
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        }
+    });
+  }
+
   //ส่งค่าสิ่งที่ค้นหา
   selectSearchResult(item){
-
     this.autocompleteItems = [];
+
     this.geocoder.geocode({'placeId': item.place_id}, (results, status) => {
       if(status === 'OK' && results[0]){
-        let position = {
-            lat: results[0].geometry.location.lat,
-            lng: results[0].geometry.location.lng
-        };
-        let marker = new google.maps.Marker({
-          position: results[0].geometry.location,
-          map: this.map,
-        });
-        this.markers.push(marker);
-        this.map.setCenter(results[0].geometry.location);
-
-
+        this.autocompleteItems = [];
+        this.GooglePlaces.nearbySearch({
+          location: results[0].geometry.location,
+          radius: '500',
+          types: ['restaurant'],
+          key: 'AIzaSyAaHPhuw4jtwlRA6jXr0f2gUMuzs1t2MdU'
+        }, (near_places) => {
+            this.zone.run(() => {
+              this.nearbyItems = [];
+              for (var i = 0; i < near_places.length; i++) {
+                this.nearbyItems.push(near_places[i]);
+              }
+          });
+        })
       }
     })
   }
 
-  Location() {
-    this.navCtrl.navigateRoot('/location');
-  }
+
 
 
 }
