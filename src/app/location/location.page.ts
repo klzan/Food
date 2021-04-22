@@ -170,6 +170,9 @@ export class LocationPage implements OnInit {
   }
 
 
+  Map() {
+    this.navCtrl.navigateRoot('/map');
+  }
 
 
 }

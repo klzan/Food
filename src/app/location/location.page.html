@@ -14,20 +14,43 @@
   <ion-grid *ngIf="nearbyItems.length == 0">
     <ion-row>
       <ion-col col-12>
-        <h3>
+        <h2>
           Please type a place on the Search bar to see nearby Restaurants
-        </h3>
+        </h2>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-label>
   <ion-list *ngIf="nearbyItems.length > 0">
     <ion-item *ngFor="let place of nearbyItems">
-      <h2>{{place.name}}</h2>
+      <h1>{{place.name}}</h1>
       <p>{{place.vicinity}}</p>
       <p>Rating {{place.rating}}</p>
       <button ion-button clear item-end *ngIf="(place.opening_hours && !place.opening_hours.open_now)">CLOSED</button>
       <button ion-button clear item-end *ngIf="(place.opening_hours && place.opening_hours.open_now)">OPEN NOW</button>
     </ion-item>
   </ion-list>
-
+</ion-label>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    I<ion-tabs>
+      <ion-tab-bar slot="bottom">
+
+
+        <ion-tab-button (click)="Map()">
+          <ion-icon name="compass"></ion-icon>
+          <ion-label>Map</ion-label>
+        </ion-tab-button>
+
+
+        <ion-tab-button tab="Location">
+          <ion-icon name="restaurant"></ion-icon>
+          <ion-label>restaurant</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>
