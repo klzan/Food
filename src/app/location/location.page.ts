@@ -40,12 +40,15 @@ export class LocationPage implements OnInit {
     private navCtrl: NavController,
     public loadingCtrl: LoadingController
   ) {
-    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
-    this.autocomplete = { input: '' };
-    this.autocompleteItems = [];
     this.geocoder = new google.maps.Geocoder;
-    this.markers = [];
-    
+    let elem = document.createElement("div")
+    this.GooglePlaces = new google.maps.places.PlacesService(elem);
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocomplete = {
+      input: ''
+    };
+    this.autocompleteItems = [];
+    this.loading = this.loadingCtrl.create();
   }
 
   //LOAD THE MAP ONINIT.
